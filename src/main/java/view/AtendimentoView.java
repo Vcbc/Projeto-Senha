@@ -280,7 +280,7 @@ public class AtendimentoView extends javax.swing.JFrame {
     private void initComponentsModel() {
         emEsperaModel = new DefaultListModel();
         jListProximas.setModel(emEsperaModel);
-        
+
         chamadosModel = new DefaultListModel();
         jListChamadas.setModel(chamadosModel);
     }
@@ -291,11 +291,11 @@ public class AtendimentoView extends javax.swing.JFrame {
             @Override
             public void run() {
                 while (true) {
-                    
+
                     atualizaPainelSenha();
                     atualizaPainelEspera();
                     atualizaPainelChamados();
-                    
+
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
@@ -306,7 +306,7 @@ public class AtendimentoView extends javax.swing.JFrame {
             }
         }).start();
     }
-    
+
     public void atualizaPainelSenha() {
         try {
             //Atualiza Senha Chamada (status = 1)
@@ -321,6 +321,29 @@ public class AtendimentoView extends javax.swing.JFrame {
         }
     }
 
+    public void atualizaPainel(DefaultListModel listModel, List<AtendimentoModel> listAtendimentoModel) {
+
+        //atualiza os models somente se ocorreu alguma alteração, para evitar do painel ficar "piscando" a cada segundo
+        
+        if (listAtendimentoModel.isEmpty()) {
+            listModel.clear();
+        } else {
+            if (listModel.isEmpty()) {
+                for (AtendimentoModel at : listAtendimentoModel) {
+                    listModel.addElement(at);
+                }
+            } else {
+                
+                if ((listAtendimentoModel.get(0).getId() != ((AtendimentoModel) listModel.get(0)).getId()) || (listAtendimentoModel.size() != listModel.getSize())) {
+                    listModel.clear();
+                    for (AtendimentoModel at : listAtendimentoModel) {
+                        listModel.addElement(at);
+                    }
+                }
+            }
+        }
+    }
+
     public void atualizaPainelEspera() {
 
         try {
@@ -328,23 +351,8 @@ public class AtendimentoView extends javax.swing.JFrame {
             AtendimentoController atController = new AtendimentoController();
             List<AtendimentoModel> nextList = atController.getNextList();
 
-            if (nextList.isEmpty()) {
-                emEsperaModel.clear();
-            } else {                
-                if (emEsperaModel.isEmpty()) {
-                    for (AtendimentoModel at : nextList) {
-                        emEsperaModel.addElement(at);
-                    }
-                } else {
-                    //atualiza a lista somente se ocorreu alteração
-                    if ((nextList.get(0).getId() != ((AtendimentoModel) emEsperaModel.get(0)).getId()) || (nextList.size() != emEsperaModel.getSize())) {
-                        emEsperaModel.clear();
-                        for (AtendimentoModel at : nextList) {
-                            emEsperaModel.addElement(at);
-                        }
-                    }
-                }
-            }
+            atualizaPainel(emEsperaModel, nextList);
+
         } catch (SQLException ex) {
             Logger.getLogger(AtendimentoView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -357,26 +365,8 @@ public class AtendimentoView extends javax.swing.JFrame {
             AtendimentoController atController = new AtendimentoController();
             List<AtendimentoModel> chamadosList = atController.getChamadosList();
 
-            if (chamadosList.isEmpty()) {
-                chamadosModel.clear();
-            } else {
-
-                if (chamadosModel.isEmpty()) {
-                    for (AtendimentoModel at : chamadosList) {
-                        chamadosModel.addElement(at);
-                    }
-
-                } else {
-                    //atualiza a lista somente se ocorreu alteração
-                    if ((chamadosList.get(0).getId() != ((AtendimentoModel) chamadosModel.get(0)).getId()) || (chamadosList.size() != chamadosModel.getSize())) {
-                        chamadosModel.clear();
-                        for (AtendimentoModel at : chamadosList) {
-                            chamadosModel.addElement(at);
-                        }
-                    }
-                }
-            }
-
+            atualizaPainel(chamadosModel, chamadosList);
+            
         } catch (SQLException ex) {
             Logger.getLogger(AtendimentoView.class.getName()).log(Level.SEVERE, null, ex);
         }
