@@ -87,9 +87,6 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="/Users/jonathandamasiomedeiros/NetBeansProjects/Discord/src/main/resource/SIMBOLO-02.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Painel de Administra&#xe7;&#xe3;o"/>
           </Properties>
         </Component>

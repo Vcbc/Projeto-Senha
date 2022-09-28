@@ -202,25 +202,16 @@ public class AdministracaoView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informe um nome para cadastrar uma senha");
             
         }else{
-            try {
-                AtendimentoController atController = new AtendimentoController();
-                
-                AtendimentoModel atendimento = new AtendimentoModel();
-                atendimento.setNome(nome);
-                atendimento.setData(new Date());
-                atendimento.setStatus(0);
-                int senha = atController.save(atendimento);
-                
-                //Atualiza o label com a senha que foi cadastrada no banco
-                jLabelSenhaCadastrada.setText("Cadastrado: " + senha + " - " + atendimento.getNome());
-                
-                //Limpa o campo nome para a digitação do próximo cliente
-                jTextFieldCadastro.setText("");
-                
-                
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao cadastrar pessoa: " + ex.getMessage());
-            }
+            AtendimentoController atController = new AtendimentoController();
+            AtendimentoModel atendimento = new AtendimentoModel();
+            atendimento.setNome(nome);
+            atendimento.setData(new Date());
+            atendimento.setStatus(0);
+            int senha = atController.save(atendimento);
+            //Atualiza o label com a senha que foi cadastrada no banco
+            jLabelSenhaCadastrada.setText("Cadastrado: " + senha + " - " + atendimento.getNome());
+            //Limpa o campo nome para a digitação do próximo cliente
+            jTextFieldCadastro.setText("");
             
             
         }
@@ -241,10 +232,11 @@ public class AdministracaoView extends javax.swing.JFrame {
             if (atendimento != null){
                 //Atualiza a pessoa como em atendimento
                 atendimento.setStatus(1);
+                atendimento.setAtendimento(new Date());
                 atController.update(atendimento);
                 jLabelSenhaChamada.setText("Última senha chamada: " + atendimento.getId() + " - " + atendimento.getNome());
             }else{
-                jLabelSenhaChamada.setText("Sem clientes na fila. Vá tomar um café :D");
+                jLabelSenhaChamada.setText("Sem clientes na fila");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Erro ao chamar próxima pessoa " + ex.getMessage());

@@ -45,7 +45,7 @@ public class Discord {
             }
             
             
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw new SQLException("Interface não conseguiu inserir senha: " + ex.getMessage(),ex);
         }
         
